@@ -1,9 +1,7 @@
-import { Authentication } from './../../../domain/usecases/authentication'
-import { InvalidParamError } from './../../errors/invalid-param-error'
-import { EmailValidator } from './../../protocols/email-validator'
-import { MissingParamError } from './../../errors/missing-param-error'
+import { Controller, HttpRequest, HttpResponse, EmailValidator, Authentication } from './signup-protocols'
 import { badRequest, serverError, unauthorized } from './../../helpers/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '../../protocols'
+import { InvalidParamError } from './../../errors/invalid-param-error'
+import { MissingParamError } from './../../errors/missing-param-error'
 
 export class LoginController implements Controller {
   private readonly emailValidor: EmailValidator
