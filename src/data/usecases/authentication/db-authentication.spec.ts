@@ -15,7 +15,11 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'hashed_password'
 })
 
-const makeFakeAuthentication = (): AuthenticationModel => ({ email: 'any_email@mail.com', password: 'any_password' })
+const makeFakeAuthentication = (): AuthenticationModel => (
+  {
+    email: 'any_email@mail.com', password: 'any_password'
+  }
+)
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
