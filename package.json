@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/aloisiomartinez/cleanNodeApi/issues"
   },
-  "homepage": "https://github.com/aloisiomartinez/cleanNodeApi#readme"
+  "homepage": "https://github.com/aloisiomartinez/cleanNodeApi#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^3.2.8"
+  }
 }
