@@ -5,6 +5,6 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "import/export": "off"
+    "@typescript-eslint/strict-boolean-expressions": "off"
   }
 }
