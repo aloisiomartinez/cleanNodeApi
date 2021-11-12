@@ -3,6 +3,7 @@ import { LogControllerDecorator } from './log'
 import { serverError, ok } from '../../presentation/helpers/http-helper'
 import { LogErrorRepository } from '../../data/protocols/log-error-repository'
 import { AccountModel } from '../../domain/models/account'
+
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -15,7 +16,7 @@ const makeController = (): Controller => {
 
 const makeLogErrorRepository = (): LogErrorRepository => {
   class LogErrorRepositoryStub implements LogErrorRepository {
-    async log (stack: string): Promise<void> {
+    async logError (stack: string): Promise<void> {
       return await new Promise(resolve => resolve())
     }
   }
@@ -85,7 +86,7 @@ describe('LogController Decorator', () => {
     async () => {
       const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
 
-      const logSpy = jest.spyOn(logErrorRepositoryStub, 'log')
+      const logSpy = jest.spyOn(logErrorRepositoryStub, 'logError')
       jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(new Promise(resolve => resolve(makeFakeServerError())))
 
       await sut.handle(makeFakeRequest())
