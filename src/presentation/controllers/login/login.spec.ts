@@ -6,6 +6,7 @@ import { MissingParamError } from './../../errors/missing-param-error'
 import { LoginController } from './login'
 import { badRequest } from '../../helpers/http-helper'
 import { Authentication } from '../../../domain/usecases/authentication'
+
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
