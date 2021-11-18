@@ -1,29 +1,44 @@
 import { InvalidParamError } from './../../errors/invalid-param-error'
-import { EmailValidator } from './../../protocols/email-validator'
 import { MissingParamError } from './../../errors/missing-param-error'
-import { badRequest } from './../../helpers/http-helper'
-import { HttpRequest, HttpResponse, Controller } from '../../protocols'
+import { badRequest, ok, serverError, unauthorized } from './../../helpers/http-helper'
+import { HttpRequest, HttpResponse, Controller, EmailValidator, Authentication } from './login-protocols'
 
 export class LoginController implements Controller {
   private readonly emailValidator: EmailValidator
+  private readonly authentication: Authentication
 
-  constructor (emailValidator: EmailValidator) {
+  constructor (emailValidator: EmailValidator, authentication: Authentication) {
     this.emailValidator = emailValidator
+    this.authentication = authentication
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { email, password } = httpRequest.body
+    try {
+      const requiredFields = ['email', 'password']
 
-    if (email) {
-      return await new Promise(resolve => badRequest(new MissingParamError('email')))
-    }
-    if (password) {
-      return await new Promise(resolve => badRequest(new MissingParamError('password')))
-    }
-    const isValid = this.emailValidator.isValid(email)
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
+      }
 
-    if (!isValid) {
-      return await new Promise(resolve => badRequest(new InvalidParamError('email')))
+      const { email, password } = httpRequest.body
+
+      const isValid = this.emailValidator.isValid(email)
+
+      if (!isValid) {
+        return badRequest(new InvalidParamError('email'))
+      }
+
+      const accessToken = await this.authentication.auth(email, password)
+
+      if (!accessToken) {
+        return unauthorized()
+      }
+
+      return ok({ accessToken })
+    } catch (error) {
+      return serverError(error)
     }
   }
 }
